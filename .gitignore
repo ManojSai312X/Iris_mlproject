@@ -1,0 +1,49 @@
+# Python files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# IDE-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data and model files (if not version-controlled)
+*.csv
+*.pkl
+*.h5
+*.model
+*.joblib
+
+# Logs and outputs
+*.log
+*.out
+*.tmp
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Package and dependency files
+*.egg-info/
+dist/
+build/
+pip-wheel-metadata/
+
+# Environment files
+.env
+*.env
+
+# pytest cache
+.pytest_cache/
