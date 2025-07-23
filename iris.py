@@ -3,10 +3,12 @@ import streamlit as st
 from sklearn.datasets import load_iris
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-
+from joblib import dump, load
+import os
 import warnings
 warnings.filterwarnings('ignore')
 
+# App title
 st.title("Iris Dataset Explorer")
 st.write("This app allows you to explore the Iris dataset and make predictions.")
 
@@ -16,12 +18,21 @@ df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
 df['target'] = iris.target
 df['species'] = df['target'].apply(lambda x: iris.target_names[x])
 
-# Train model
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-X = df[iris.feature_names]
-y = df['target']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=22)
-model.fit(X_train, y_train)
+MODEL_PATH = "iris_model.joblib"
+
+# Check if saved model exists, otherwise train and save it
+if os.path.exists(MODEL_PATH):
+    model = load(MODEL_PATH)
+    st.sidebar.success("Loaded pre-trained model from disk")
+else:
+    # Train model
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    X = df[iris.feature_names]
+    y = df['target']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=22)
+    model.fit(X_train, y_train)
+    dump(model, MODEL_PATH)
+    st.sidebar.success("Trained new model and saved to disk")
 
 # Display data
 st.write("### Iris Dataset")
@@ -65,7 +76,7 @@ prediction_proba = model.predict_proba(input_data)
 
 # Display results
 st.write("### Prediction Results")
-st.subheader(f"Predicted species: * * {iris.target_names[prediction][0]}  * *")
+st.subheader(f"Predicted species: **{iris.target_names[prediction][0]}**")
 
 st.write("Prediction probabilities:")
 proba_df = pd.DataFrame({
@@ -73,4 +84,11 @@ proba_df = pd.DataFrame({
     'Probability': prediction_proba[0]
 })
 
-st.bar_chart(proba_df.set_index('Species'),use_container_width=True)
+st.bar_chart(proba_df.set_index('Species'), use_container_width=True)
+
+# Model information
+st.sidebar.markdown("---")
+st.sidebar.write("Model Information:")
+st.sidebar.write(f"Model type: {model.__class__.__name__}")
+st.sidebar.write(f"Number of trees: {model.n_estimators}")
+st.sidebar.write(f"Classes: {list(iris.target_names)}")
