@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 *.so
 .Python
+iris.py
 
 # Virtual environment
 venv/
@@ -19,12 +20,7 @@ env/
 *.swp
 *.swo
 
-# Data and model files (if not version-controlled)
-*.csv
-*.pkl
-*.h5
-*.model
-*.joblib
+
 
 # Logs and outputs
 *.log
@@ -47,5 +43,3 @@ pip-wheel-metadata/
 
 # pytest cache
 .pytest_cache/
-
-iris.py
